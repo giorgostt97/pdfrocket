@@ -1,79 +1,96 @@
 import Link from "next/link";
+import {
+  FileText,
+  Scissors,
+  RotateCw,
+  Image,
+  Images,
+  Trash2,
+  Droplets,
+  ArrowUpDown,
+  Zap,
+  Shield,
+  Gem,
+  Globe,
+} from "lucide-react";
 
 const tools = [
   {
     name: "Merge PDF",
     href: "/merge",
-    icon: "📄",
+    icon: <FileText className="h-12 w-12 text-blue-500" />,
     description: "Combine multiple PDFs into one.",
   },
   {
     name: "Split PDF",
     href: "/split",
-    icon: "✂️",
+    icon: <Scissors className="h-12 w-12 text-green-500" />,
     description: "Split a PDF into separate pages.",
   },
   {
     name: "Rotate PDF",
     href: "/rotate",
-    icon: "🔄",
+    icon: <RotateCw className="h-12 w-12 text-orange-500" />,
     description: "Rotate every page in your PDF.",
   },
   {
     name: "JPG to PDF",
     href: "/jpg-to-pdf",
-    icon: "🖼️",
+    icon: <Image className="h-12 w-12 text-pink-500" />,
     description: "Convert images into PDFs.",
   },
   {
     name: "Delete Pages",
     href: "/delete-pages",
-    icon: "🗑️",
+    icon: <Trash2 className="h-12 w-12 text-red-500" />,
     description: "Remove pages from a PDF.",
   },
   {
-    name: "PDF to JPG",
-    href: "#",
-    icon: "📷",
-    description: "Coming Soon",
+    name: "Extract Pages",
+    href: "/extract-pages",
+    icon: <Images className="h-12 w-12 text-cyan-500" />,
+    description: "Extract selected pages into a new PDF.",
   },
   {
-    name: "Compress PDF",
-    href: "#",
-    icon: "🗜️",
-    description: "Coming Soon",
+    name: "Watermark PDF",
+    href: "/watermark",
+    icon: <Droplets className="h-12 w-12 text-sky-500" />,
+    description: "Add a custom watermark.",
   },
   {
-  name: "Extract Pages",
-  href: "/extract-pages",
-  icon: "📑",
-  description: "Extract selected pages into a new PDF.",
-},
-{
-  name: "Watermark PDF",
-  href: "/watermark",
-  icon: "💧",
-  description: "Add a custom watermark to every page.",
+    name: "Reorder Pages",
+    href: "/reorder",
+    icon: <ArrowUpDown className="h-12 w-12 text-violet-500" />,
+    description: "Rearrange pages in any order.",
+  },
+  {
+  name: "Page Numbers",
+  href: "/page-numbers",
+  icon: <FileText className="h-12 w-12 text-emerald-500" />,
+  description: "Add page numbers to every page.",
 },
 ];
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black">
-      <section className="mx-auto max-w-7xl px-6 py-20 text-center">
-
-        <h1 className="text-6xl font-extrabold text-white md:text-7xl">
-          Work Smarter With
+    <main className="min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black">
+      <section className="relative mx-auto max-w-7xl overflow-hidden px-6 py-28 text-center">
+        <div className="absolute left-1/2 top-10 -z-10 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-blue-600/20 blur-[150px]" />
+<div className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-2 text-sm font-medium text-blue-400">
+  🚀 Trusted PDF Tools
+</div>
+        <h1 className="mt-8 text-6xl font-extrabold leading-tight text-white md:text-7xl">
+          Powerful PDF Tools
           <span className="block text-blue-500">
-            PDF Files
+            Fast. Secure. Simple.
           </span>
         </h1>
 
-        <p className="mx-auto mt-8 max-w-2xl text-xl text-zinc-400">
-          Merge, Split, Rotate and Convert PDFs in seconds.
-          <br />
-          Free to Start • Secure • No Registration Required
-        </p>
+        <p className="mx-auto mt-8 max-w-3xl text-xl leading-8 text-zinc-400">
+  Merge, split, rotate, extract, watermark and organize PDF files directly in your browser.
+  <br />
+  No installation. No registration. Start free.
+</p>
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">
 
@@ -81,23 +98,23 @@ export default function Home() {
             href="/merge"
             className="rounded-xl bg-blue-600 px-8 py-4 font-semibold text-white transition hover:bg-blue-700"
           >
-            🚀 Start Editing
+            Start Free →
           </Link>
 
           <Link
-            href="#tools"
+            href="/pricing"
             className="rounded-xl border border-zinc-700 px-8 py-4 font-semibold text-white transition hover:bg-zinc-900"
           >
-            View Tools
+            View Pricing
           </Link>
 
         </div>
 
-        <div className="mt-20 grid gap-6 md:grid-cols-3">
+        <div className="mt-20 grid gap-6 md:grid-cols-4">
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
             <h2 className="text-5xl font-bold text-blue-500">
-              7
+              9
             </h2>
 
             <p className="mt-2 text-zinc-400">
@@ -116,14 +133,20 @@ export default function Home() {
           </div>
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
-            <h2 className="text-5xl">
-              🔒
-            </h2>
+  <Shield className="mx-auto h-12 w-12 text-green-500" />
 
-            <p className="mt-2 text-zinc-400">
-              Secure Processing
-            </p>
-          </div>
+  <p className="mt-4 text-zinc-400">
+    Secure Processing
+  </p>
+</div>
+
+<div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
+  <Globe className="mx-auto h-12 w-12 text-cyan-500" />
+
+  <p className="mt-4 text-zinc-400">
+    Works Everywhere
+  </p>
+</div>
 
         </div>
 
@@ -133,26 +156,26 @@ export default function Home() {
         >
 
           <h2 className="text-4xl font-bold text-white">
-            PDF Tools
+            Explore Our PDF Tools
           </h2>
 
           <p className="mt-4 text-zinc-400">
-            Fast, secure and easy-to-use PDF tools.
+            Everything you need to edit, organize and convert PDF files in one place.
           </p>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid gap-6 md:grid-cols-4">
 
             {tools.map((tool) => (
               <Link
                 key={tool.name}
                 href={tool.href}
-                className="rounded-3xl border border-zinc-800 bg-zinc-900 p-8 transition duration-300 hover:-translate-y-2 hover:border-blue-500 hover:shadow-2xl"
+                className="group rounded-3xl border border-zinc-800 bg-zinc-900 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-blue-500 hover:shadow-[0_0_40px_rgba(59,130,246,0.35)]"
               >
-                <div className="text-5xl">
-                  {tool.icon}
-                </div>
+                <div className="flex justify-center transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6">
+  {tool.icon}
+</div>
 
-                <h3 className="mt-6 text-2xl font-bold text-white">
+                <h3 className="mt-6 text-2xl font-bold text-white transition-colors group-hover:text-blue-400">
                   {tool.name}
                 </h3>
 
@@ -168,44 +191,78 @@ export default function Home() {
 
         <div className="mt-24 rounded-3xl border border-zinc-800 bg-zinc-900 p-12">
 
-          <h2 className="text-4xl font-bold text-white">
-            Why PDFRocket?
-          </h2>
+  Why PDFRocket
 
-          <div className="mt-10 grid gap-8 md:grid-cols-4">
+</div>
 
-            <div>
-              <h3 className="text-3xl">⚡</h3>
-              <p className="mt-3 text-zinc-400">
-                Lightning fast processing.
-              </p>
-            </div>
+{/* FAQ GOES HERE */}
 
-            <div>
-              <h3 className="text-3xl">🔒</h3>
-              <p className="mt-3 text-zinc-400">
-                Files are automatically deleted.
-              </p>
-            </div>
+<div className="mt-36">
 
-            <div>
-              <h3 className="text-3xl">💎</h3>
-              <p className="mt-3 text-zinc-400">
-                Free plan with optional Pro features.
-              </p>
-            </div>
+  <div className="mx-auto max-w-4xl">
 
-            <div>
-              <h3 className="text-3xl">🌍</h3>
-              <p className="mt-3 text-zinc-400">
-                Works on desktop, tablet and mobile.
-              </p>
-            </div>
+    <h2 className="text-center text-5xl font-extrabold text-white">
+      Frequently Asked Questions
+    </h2>
 
-          </div>
+    <p className="mt-6 text-center text-xl text-zinc-400">
+      Everything you need to know about PDFRocket.
+    </p>
 
-        </div>
+    <div className="mt-14 space-y-6">
 
+      <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
+        <h3 className="text-xl font-bold text-white">
+          Is PDFRocket free?
+        </h3>
+
+        <p className="mt-3 text-zinc-400">
+          Yes. Start free. Upgrade to Pro anytime.
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
+        <h3 className="text-xl font-bold text-white">
+          Are my files secure?
+        </h3>
+
+        <p className="mt-3 text-zinc-400">
+          Yes. Files are processed securely and automatically deleted after processing.
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
+        <h3 className="text-xl font-bold text-white">
+          Do I need an account?
+        </h3>
+
+        <p className="mt-3 text-zinc-400">
+          No. The free tools work without an account.
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
+        <h3 className="text-xl font-bold text-white">
+          Which devices are supported?
+        </h3>
+
+        <p className="mt-3 text-zinc-400">
+          Windows, macOS, Linux, Android and iPhone.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div className="mt-24 rounded-3xl border border-blue-500/30 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 p-14 text-center">
+
+  Ready to edit PDFs?
+
+</div>
+      
       </section>
     </main>
   );
