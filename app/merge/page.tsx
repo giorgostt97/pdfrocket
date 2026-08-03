@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import UploadBox from "../components/UploadBox";
+import SelectedFiles from "../components/SelectedFiles";
+import PrimaryButton from "../components/PrimaryButton";
+import ToolPage from "../components/ToolPage";
 
 export default function MergePage() {
   const [files, setFiles] = useState<File[]>([]);
@@ -13,7 +17,7 @@ export default function MergePage() {
 
   async function mergePDFs() {
     if (files.length < 2) {
-      alert("Select at least 2 PDFs");
+      toast("Please select at least 2 PDFs.");
       return;
     }
 
@@ -32,11 +36,13 @@ export default function MergePage() {
       });
 
       if (!res.ok) {
-        alert("Merge failed");
+        toast.error("Merge failed.");
         return;
       }
 
       const blob = await res.blob();
+
+      toast.success("PDF merged successfully!");
 
       const url = window.URL.createObjectURL(blob);
 
@@ -48,82 +54,35 @@ export default function MergePage() {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error(error);
-      alert("Something went wrong.");
+      toast.error("Something went wrong.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen py-16">
-      <div className="max-w-2xl mx-auto rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl p-10">
+    <ToolPage
+      title="📄 Merge PDF"
+      description="Combine multiple PDF files into one document."
+    >
+      <UploadBox
+        onChange={(newFiles) =>
+          setFiles((prev) => [...prev, ...newFiles])
+        }
+      />
 
-        <h1 className="text-5xl font-bold text-center text-white">
-          📄 Merge PDF
-        </h1>
+      <SelectedFiles
+        files={files}
+        onRemove={removeFile}
+      />
 
-        <p className="mt-4 text-center text-zinc-400">
-          Combine multiple PDF files into one document.
-        </p>
-
-        <UploadBox
-          accept={{
-            "application/pdf": [".pdf"],
-          }}
-          onChange={(newFiles) =>
-            setFiles((prev) => [...prev, ...newFiles])
-          }
-        />
-
-        {files.length > 0 && (
-          <div className="mt-8">
-            <h3 className="mb-3 font-semibold text-white">
-              Selected Files
-            </h3>
-
-            <div className="space-y-3">
-              {files.map((file, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between rounded-xl bg-zinc-800 px-4 py-3"
-                >
-                  <div>
-                    <p className="truncate font-medium text-white">
-                      📄 {file.name}
-                    </p>
-
-                    <p className="text-sm text-zinc-400">
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => removeFile(index)}
-                    className="text-xl font-bold text-red-500 transition hover:text-red-400"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <button
-          onClick={mergePDFs}
-          disabled={loading || files.length < 2}
-          className="mt-8 w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {loading
-            ? "⏳ Merging PDFs..."
-            : `🚀 Merge ${files.length} PDF${files.length !== 1 ? "s" : ""}`}
-        </button>
-
-        <p className="mt-6 text-center text-sm text-zinc-400">
-          🔒 Your files are processed securely and deleted after processing.
-        </p>
-
-      </div>
-    </main>
+      <PrimaryButton
+        loading={loading}
+        disabled={loading || files.length < 2}
+        loadingText="⏳ Merging PDFs..."
+        text={`🚀 Merge ${files.length} PDF${files.length !== 1 ? "s" : ""}`}
+        onClick={mergePDFs}
+      />
+    </ToolPage>
   );
 }

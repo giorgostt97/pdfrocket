@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import UploadBox from "../components/UploadBox";
+import SelectedFiles from "../components/SelectedFiles";
+import PrimaryButton from "../components/PrimaryButton";
+import ToolPage from "../components/ToolPage";
 
 export default function SplitPage() {
   const [files, setFiles] = useState<File[]>([]);
@@ -13,7 +17,7 @@ export default function SplitPage() {
 
   async function splitPDF() {
     if (files.length !== 1) {
-      alert("Please select exactly 1 PDF");
+      toast("Please select exactly one PDF.");
       return;
     }
 
@@ -30,94 +34,54 @@ export default function SplitPage() {
       });
 
       if (!res.ok) {
-        alert("Split failed");
+        toast.error("Split failed.");
         return;
       }
 
       const blob = await res.blob();
 
-const url = window.URL.createObjectURL(blob);
+      toast.success("PDF split successfully!");
 
-const a = document.createElement("a");
-a.href = url;
-a.download = "split-pages.zip";
-a.click();
+      const url = window.URL.createObjectURL(blob);
 
-window.URL.revokeObjectURL(url);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "split-pages.zip";
+      a.click();
+
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error(error);
-      alert("Something went wrong.");
+      toast.error("Something went wrong.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen py-16">
-      <div className="max-w-2xl mx-auto rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl p-10">
+    <ToolPage
+      title="✂️ Split PDF"
+      description="Split your PDF into individual pages."
+    >
+      <UploadBox
+        accept={{
+          "application/pdf": [".pdf"],
+        }}
+        onChange={setFiles}
+      />
 
-        <h1 className="text-5xl font-bold text-center text-white">
-          ✂️ Split PDF
-        </h1>
+      <SelectedFiles
+        files={files}
+        onRemove={removeFile}
+      />
 
-        <p className="mt-4 text-center text-zinc-400">
-          Upload one PDF and split it into individual pages.
-        </p>
-
-        <UploadBox
-          accept={{
-            "application/pdf": [".pdf"],
-          }}
-          onChange={setFiles}
-        />
-
-        {files.length > 0 && (
-          <div className="mt-8">
-            <h3 className="mb-3 font-semibold text-white">
-              Selected File
-            </h3>
-
-            <div className="space-y-3">
-              {files.map((file, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between rounded-xl bg-zinc-800 px-4 py-3"
-                >
-                  <div>
-                    <p className="truncate font-medium text-white">
-                      📄 {file.name}
-                    </p>
-
-                    <p className="text-sm text-zinc-400">
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => removeFile(index)}
-                    className="text-xl font-bold text-red-500 transition hover:text-red-400"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <button
-          onClick={splitPDF}
-          disabled={loading || files.length !== 1}
-          className="mt-8 w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {loading ? "⏳ Splitting PDF..." : "✂️ Split PDF"}
-        </button>
-
-        <p className="mt-6 text-center text-sm text-zinc-400">
-          🔒 Your PDF is processed securely and deleted after processing.
-        </p>
-
-      </div>
-    </main>
+      <PrimaryButton
+        loading={loading}
+        disabled={loading || files.length !== 1}
+        loadingText="⏳ Splitting..."
+        text="✂️ Split PDF"
+        onClick={splitPDF}
+      />
+    </ToolPage>
   );
 }
