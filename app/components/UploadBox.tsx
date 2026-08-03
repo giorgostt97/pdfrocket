@@ -27,10 +27,10 @@ export default function UploadBox({
   return (
     <div
       {...getRootProps()}
-      className={`mt-10 h-64 rounded-3xl border-2 border-dashed cursor-pointer transition-all duration-300 flex flex-col items-center justify-center ${
+      className={`mt-10 flex h-64 cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed transition-all duration-300 ${
         isDragActive
-          ? "border-blue-500 bg-blue-50"
-          : "border-gray-300 hover:border-black hover:bg-gray-50"
+          ? "border-blue-500 bg-blue-950/40"
+          : "border-zinc-700 bg-zinc-800 hover:border-blue-500 hover:bg-zinc-800/80"
       }`}
     >
       <input {...getInputProps()} />
@@ -39,14 +39,20 @@ export default function UploadBox({
         {isPdf ? "📄" : "🖼️"}
       </div>
 
-      <h2 className="mt-4 text-2xl font-bold">
+      <h2 className="mt-4 text-2xl font-bold text-white">
         {isDragActive
           ? `Drop your ${isPdf ? "PDFs" : "Images"} here`
           : `Drag & Drop ${isPdf ? "PDFs" : "Images"}`}
       </h2>
 
-      <p className="mt-2 text-gray-500">
+      <p className="mt-2 text-zinc-400">
         or click to browse
+      </p>
+
+      <p className="mt-4 text-sm text-zinc-500">
+        {isPdf
+          ? "Supports PDF files"
+          : "Supports JPG, JPEG and PNG"}
       </p>
     </div>
   );

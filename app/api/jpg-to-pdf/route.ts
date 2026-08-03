@@ -45,8 +45,9 @@ export async function POST(req: NextRequest) {
     }
 
     const pdfBytes = await pdf.save();
+const pdfBuffer = Buffer.from(pdfBytes);
 
-    return new Response(pdfBytes, {
+return new Response(pdfBuffer, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition":

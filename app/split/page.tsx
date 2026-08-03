@@ -34,9 +34,16 @@ export default function SplitPage() {
         return;
       }
 
-      const data = await res.json();
+      const blob = await res.blob();
 
-      alert(`Success! PDF contains ${data.pages} pages.`);
+const url = window.URL.createObjectURL(blob);
+
+const a = document.createElement("a");
+a.href = url;
+a.download = "split-pages.zip";
+a.click();
+
+window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error(error);
       alert("Something went wrong.");
@@ -46,24 +53,27 @@ export default function SplitPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-16">
-      <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-10">
+    <main className="min-h-screen py-16">
+      <div className="max-w-2xl mx-auto rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl p-10">
 
-        <h1 className="text-5xl font-bold text-center">
+        <h1 className="text-5xl font-bold text-center text-white">
           ✂️ Split PDF
         </h1>
 
-        <p className="text-center text-gray-500 mt-4">
+        <p className="mt-4 text-center text-zinc-400">
           Upload one PDF and split it into individual pages.
         </p>
 
         <UploadBox
-          onChange={(newFiles) => setFiles(newFiles)}
+          accept={{
+            "application/pdf": [".pdf"],
+          }}
+          onChange={setFiles}
         />
 
         {files.length > 0 && (
           <div className="mt-8">
-            <h3 className="font-semibold mb-3">
+            <h3 className="mb-3 font-semibold text-white">
               Selected File
             </h3>
 
@@ -71,21 +81,21 @@ export default function SplitPage() {
               {files.map((file, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between rounded-xl bg-gray-100 px-4 py-3"
+                  className="flex items-center justify-between rounded-xl bg-zinc-800 px-4 py-3"
                 >
                   <div>
-                    <p className="font-medium truncate">
+                    <p className="truncate font-medium text-white">
                       📄 {file.name}
                     </p>
 
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-zinc-400">
                       {(file.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
 
                   <button
                     onClick={() => removeFile(index)}
-                    className="text-red-500 hover:text-red-700 text-xl font-bold"
+                    className="text-xl font-bold text-red-500 transition hover:text-red-400"
                   >
                     ✕
                   </button>
@@ -98,10 +108,14 @@ export default function SplitPage() {
         <button
           onClick={splitPDF}
           disabled={loading || files.length !== 1}
-          className="mt-8 w-full rounded-xl bg-black py-4 text-lg font-semibold text-white transition hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-8 w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading ? "⏳ Splitting PDF..." : "✂️ Split PDF"}
         </button>
+
+        <p className="mt-6 text-center text-sm text-zinc-400">
+          🔒 Your PDF is processed securely and deleted after processing.
+        </p>
 
       </div>
     </main>

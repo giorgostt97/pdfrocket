@@ -3,17 +3,18 @@
 import { useState } from "react";
 import UploadBox from "../components/UploadBox";
 
-export default function MergePage() {
+export default function RotatePage() {
   const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
+  const [rotation, setRotation] = useState(90);
 
   function removeFile(index: number) {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   }
 
-  async function mergePDFs() {
-    if (files.length < 2) {
-      alert("Select at least 2 PDFs");
+  async function rotatePDF() {
+    if (files.length !== 1) {
+      alert("Please select exactly one PDF.");
       return;
     }
 
@@ -22,17 +23,16 @@ export default function MergePage() {
     try {
       const formData = new FormData();
 
-      files.forEach((file) => {
-        formData.append("files", file);
-      });
+      formData.append("file", files[0]);
+      formData.append("rotation", rotation.toString());
 
-      const res = await fetch("/api/merge", {
+      const res = await fetch("/api/rotate", {
         method: "POST",
         body: formData,
       });
 
       if (!res.ok) {
-        alert("Merge failed");
+        alert("Rotation failed");
         return;
       }
 
@@ -42,7 +42,7 @@ export default function MergePage() {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "merged.pdf";
+      a.download = "rotated.pdf";
       a.click();
 
       window.URL.revokeObjectURL(url);
@@ -59,26 +59,24 @@ export default function MergePage() {
       <div className="max-w-2xl mx-auto rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl p-10">
 
         <h1 className="text-5xl font-bold text-center text-white">
-          📄 Merge PDF
+          🔄 Rotate PDF
         </h1>
 
         <p className="mt-4 text-center text-zinc-400">
-          Combine multiple PDF files into one document.
+          Rotate every page in your PDF.
         </p>
 
         <UploadBox
           accept={{
             "application/pdf": [".pdf"],
           }}
-          onChange={(newFiles) =>
-            setFiles((prev) => [...prev, ...newFiles])
-          }
+          onChange={setFiles}
         />
 
         {files.length > 0 && (
           <div className="mt-8">
             <h3 className="mb-3 font-semibold text-white">
-              Selected Files
+              Selected File
             </h3>
 
             <div className="space-y-3">
@@ -88,7 +86,7 @@ export default function MergePage() {
                   className="flex items-center justify-between rounded-xl bg-zinc-800 px-4 py-3"
                 >
                   <div>
-                    <p className="truncate font-medium text-white">
+                    <p className="font-medium text-white">
                       📄 {file.name}
                     </p>
 
@@ -109,18 +107,32 @@ export default function MergePage() {
           </div>
         )}
 
+        <div className="mt-8">
+          <label className="mb-2 block font-semibold text-white">
+            Rotation
+          </label>
+
+          <select
+            value={rotation}
+            onChange={(e) => setRotation(Number(e.target.value))}
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-800 p-3 text-white outline-none focus:border-blue-500"
+          >
+            <option value={90}>90°</option>
+            <option value={180}>180°</option>
+            <option value={270}>270°</option>
+          </select>
+        </div>
+
         <button
-          onClick={mergePDFs}
-          disabled={loading || files.length < 2}
+          onClick={rotatePDF}
+          disabled={loading || files.length !== 1}
           className="mt-8 w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {loading
-            ? "⏳ Merging PDFs..."
-            : `🚀 Merge ${files.length} PDF${files.length !== 1 ? "s" : ""}`}
+          {loading ? "⏳ Rotating..." : "🔄 Rotate PDF"}
         </button>
 
         <p className="mt-6 text-center text-sm text-zinc-400">
-          🔒 Your files are processed securely and deleted after processing.
+          🔒 Your PDF is processed securely and deleted after processing.
         </p>
 
       </div>
