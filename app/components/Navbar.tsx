@@ -41,7 +41,15 @@ export default function Navbar() {
           >
             JPG → PDF
           </Link>
-
+          <Link href="/delete-pages">
+  Delete Pages
+</Link>
+<Link href="/extract-pages">
+  Extract Pages
+</Link>
+<Link href="/watermark">
+  Watermark
+</Link>
           <button className="rounded-xl bg-blue-600 px-5 py-2 font-semibold text-white transition hover:bg-blue-700">
             Go Pro
           </button>

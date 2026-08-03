@@ -6,7 +6,7 @@ import UploadBox from "../components/UploadBox";
 import SelectedFiles from "../components/SelectedFiles";
 import PrimaryButton from "../components/PrimaryButton";
 
-export default function DeletePagesPage() {
+export default function ExtractPagesPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [pages, setPages] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,14 +15,14 @@ export default function DeletePagesPage() {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   }
 
-  async function deletePages() {
+  async function extractPages() {
     if (files.length !== 1) {
       toast("Please select exactly one PDF.");
       return;
     }
 
     if (!pages.trim()) {
-      toast("Enter the page numbers to delete.");
+      toast("Enter the page numbers to extract.");
       return;
     }
 
@@ -34,25 +34,25 @@ export default function DeletePagesPage() {
       formData.append("file", files[0]);
       formData.append("pages", pages);
 
-      const res = await fetch("/api/delete-pages", {
+      const res = await fetch("/api/extract-pages", {
         method: "POST",
         body: formData,
       });
 
       if (!res.ok) {
-        toast.error("Delete failed.");
+        toast.error("Extract failed.");
         return;
       }
 
       const blob = await res.blob();
 
-      toast.success("Pages deleted successfully!");
+      toast.success("Pages extracted successfully!");
 
       const url = window.URL.createObjectURL(blob);
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "deleted-pages.pdf";
+      a.download = "extracted-pages.pdf";
       a.click();
 
       window.URL.revokeObjectURL(url);
@@ -69,11 +69,11 @@ export default function DeletePagesPage() {
       <div className="max-w-2xl mx-auto rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl p-10">
 
         <h1 className="text-5xl font-bold text-center text-white">
-          🗑 Delete Pages
+          📑 Extract Pages
         </h1>
 
         <p className="mt-4 text-center text-gray-400">
-          Remove selected pages from your PDF.
+          Extract selected pages into a new PDF.
         </p>
 
         <UploadBox
@@ -90,7 +90,7 @@ export default function DeletePagesPage() {
 
         <div className="mt-8">
           <label className="block mb-2 font-semibold text-white">
-            Pages to delete
+            Pages to extract
           </label>
 
           <input
@@ -109,9 +109,9 @@ export default function DeletePagesPage() {
         <PrimaryButton
           loading={loading}
           disabled={loading || files.length !== 1}
-          loadingText="Deleting..."
-          text="Delete Pages"
-          onClick={deletePages}
+          loadingText="Extracting..."
+          text="Extract Pages"
+          onClick={extractPages}
         />
 
         <p className="mt-6 text-center text-sm text-gray-400">

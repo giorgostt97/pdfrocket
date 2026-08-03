@@ -6,23 +6,23 @@ import UploadBox from "../components/UploadBox";
 import SelectedFiles from "../components/SelectedFiles";
 import PrimaryButton from "../components/PrimaryButton";
 
-export default function DeletePagesPage() {
+export default function WatermarkPage() {
   const [files, setFiles] = useState<File[]>([]);
-  const [pages, setPages] = useState("");
+  const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
 
   function removeFile(index: number) {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   }
 
-  async function deletePages() {
+  async function addWatermark() {
     if (files.length !== 1) {
       toast("Please select exactly one PDF.");
       return;
     }
 
-    if (!pages.trim()) {
-      toast("Enter the page numbers to delete.");
+    if (!text.trim()) {
+      toast("Enter watermark text.");
       return;
     }
 
@@ -32,27 +32,27 @@ export default function DeletePagesPage() {
       const formData = new FormData();
 
       formData.append("file", files[0]);
-      formData.append("pages", pages);
+      formData.append("text", text);
 
-      const res = await fetch("/api/delete-pages", {
+      const res = await fetch("/api/watermark", {
         method: "POST",
         body: formData,
       });
 
       if (!res.ok) {
-        toast.error("Delete failed.");
+        toast.error("Watermark failed.");
         return;
       }
 
       const blob = await res.blob();
 
-      toast.success("Pages deleted successfully!");
+      toast.success("Watermark added successfully!");
 
       const url = window.URL.createObjectURL(blob);
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "deleted-pages.pdf";
+      a.download = "watermarked.pdf";
       a.click();
 
       window.URL.revokeObjectURL(url);
@@ -69,11 +69,11 @@ export default function DeletePagesPage() {
       <div className="max-w-2xl mx-auto rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl p-10">
 
         <h1 className="text-5xl font-bold text-center text-white">
-          🗑 Delete Pages
+          💧 Watermark PDF
         </h1>
 
         <p className="mt-4 text-center text-gray-400">
-          Remove selected pages from your PDF.
+          Add a custom watermark to every page of your PDF.
         </p>
 
         <UploadBox
@@ -90,28 +90,24 @@ export default function DeletePagesPage() {
 
         <div className="mt-8">
           <label className="block mb-2 font-semibold text-white">
-            Pages to delete
+            Watermark Text
           </label>
 
           <input
             type="text"
-            value={pages}
-            onChange={(e) => setPages(e.target.value)}
-            placeholder="Example: 2,5,8"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Example: CONFIDENTIAL"
             className="w-full rounded-xl border border-zinc-700 bg-zinc-800 p-3 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-
-          <p className="mt-2 text-sm text-gray-400">
-            Example: 2,5,8
-          </p>
         </div>
 
         <PrimaryButton
           loading={loading}
           disabled={loading || files.length !== 1}
-          loadingText="Deleting..."
-          text="Delete Pages"
-          onClick={deletePages}
+          loadingText="Adding Watermark..."
+          text="Add Watermark"
+          onClick={addWatermark}
         />
 
         <p className="mt-6 text-center text-sm text-gray-400">

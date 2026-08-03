@@ -18,30 +18,34 @@ export async function POST(req: NextRequest) {
 
     const pdf = await PDFDocument.load(bytes);
 
+    const newPdf = await PDFDocument.create();
+
     const totalPages = pdf.getPageCount();
 
     const pages = pagesInput
       .split(",")
       .map((p) => parseInt(p.trim()))
-      .filter((p) => !isNaN(p))
-      .sort((a, b) => b - a);
+      .filter((p) => !isNaN(p));
 
     for (const page of pages) {
       if (page >= 1 && page <= totalPages) {
-        pdf.removePage(page - 1);
+        const [copiedPage] = await newPdf.copyPages(pdf, [
+          page - 1,
+        ]);
+
+        newPdf.addPage(copiedPage);
       }
     }
 
-    const pdfBytes = await pdf.save();
-const pdfBuffer = Buffer.from(pdfBytes);
+    const pdfBytes = await newPdf.save();
 
-return new Response(pdfBuffer, {
-  headers: {
-    "Content-Type": "application/pdf",
-    "Content-Disposition":
-      'attachment; filename="deleted-pages.pdf"',
-  },
-});
+    return new Response(Buffer.from(pdfBytes), {
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition":
+          'attachment; filename="extracted-pages.pdf"',
+      },
+    });
   } catch (err) {
     console.error(err);
 
