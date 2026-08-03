@@ -69,6 +69,18 @@ const tools = [
   icon: <FileText className="h-12 w-12 text-emerald-500" />,
   description: "Add page numbers to every page.",
 },
+{
+  name: "Duplicate Pages",
+  href: "/duplicate-pages",
+  icon: <FileText className="h-12 w-12 text-purple-500" />,
+  description: "Duplicate selected pages in a PDF.",
+},
+{
+  name: "Reverse Pages",
+  href: "/reverse-pages",
+  icon: <RotateCw className="h-12 w-12 text-indigo-500" />,
+  description: "Reverse the order of pages in a PDF.",
+},
 ];
 
 export default function Home() {
@@ -114,7 +126,7 @@ export default function Home() {
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
             <h2 className="text-5xl font-bold text-blue-500">
-              9
+              11
             </h2>
 
             <p className="mt-2 text-zinc-400">

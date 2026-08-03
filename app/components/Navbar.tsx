@@ -14,6 +14,8 @@ const tools = [
   { name: "Watermark PDF", href: "/watermark" },
   { name: "Reorder Pages", href: "/reorder" },
   { name: "Page Numbers", href: "/page-numbers" },
+  { name: "Duplicate Pages", href: "/duplicate-pages" },
+  { name: "Reverse Pages", href: "/reverse-pages" },
 ];
 
 export default function Navbar() {
