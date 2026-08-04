@@ -117,6 +117,12 @@ const tools = [
   icon: <Image className="h-12 w-12 text-emerald-500" />,
   description: "Convert every PDF page into PNG images.",
 },
+{
+  name: "OCR PDF",
+  href: "/ocr",
+  icon: <FileText className="h-12 w-12 text-blue-500" />,
+  description: "Extract text from scanned PDF documents.",
+},
 ];
 
 export default function Home() {
@@ -181,7 +187,7 @@ export default function Home() {
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
             <h2 className="text-5xl font-bold text-blue-500">
-              17
+              18
             </h2>
 
             <p className="mt-2 text-zinc-400">

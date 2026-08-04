@@ -108,6 +108,9 @@ export default function Footer() {
 >
   Cookie Policy
 </Link>
+<Link href="/ocr" className="text-zinc-400 hover:text-white">
+  OCR PDF
+</Link>
             </div>
 
           </div>
