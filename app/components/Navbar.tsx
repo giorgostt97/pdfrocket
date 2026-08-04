@@ -49,9 +49,9 @@ export default function Navbar() {
     className="h-9 w-9"
   />
 
-  <span className="text-2xl font-bold">
-    PDFRocket
-  </span>
+  <span className="hidden text-2xl font-bold sm:block">
+  PDFRocket
+</span>
 </div>
         </Link>
 
@@ -87,15 +87,15 @@ export default function Navbar() {
           </Menu>
 
           <Link
-            href="/pricing"
-            className="text-white hover:text-blue-400"
-          >
-            Pricing
-          </Link>
-          
-          <Link
+  href="/pricing"
+  className="hidden text-white hover:text-blue-400 md:block"
+>
+  Pricing
+</Link>
+
+<Link
   href="/about"
-  className="text-white hover:text-blue-400"
+  className="hidden text-white hover:text-blue-400 md:block"
 >
   About
 </Link>

@@ -6,6 +6,7 @@ import UploadBox from "../components/UploadBox";
 import SelectedFiles from "../components/SelectedFiles";
 import PrimaryButton from "../components/PrimaryButton";
 import ToolPage from "../components/ToolPage";
+import ToolSeo from "../components/ToolSeo";
 
 export default function MergePage() {
   const [files, setFiles] = useState<File[]>([]);
@@ -82,6 +83,10 @@ export default function MergePage() {
         loadingText="⏳ Merging PDFs..."
         text={`🚀 Merge ${files.length} PDF${files.length !== 1 ? "s" : ""}`}
         onClick={mergePDFs}
+      />
+      <ToolSeo
+        tool="Merge PDF"
+        description="Merge PDF files online for free using PDFRocket. Combine multiple PDF documents into a single file directly in your browser. Fast, secure and works on Windows, macOS, Linux, Android and iPhone."
       />
     </ToolPage>
   );
