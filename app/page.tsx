@@ -93,6 +93,12 @@ const tools = [
   icon: <FileText className="h-12 w-12 text-emerald-500" />,
   description: "Edit PDF title, author, subject and more.",
 },
+{
+  name: "Remove Metadata",
+  href: "/remove-metadata",
+  icon: <FileText className="h-12 w-12 text-red-500" />,
+  description: "Remove metadata from a PDF document.",
+},
 ];
 
 export default function Home() {
@@ -138,7 +144,7 @@ export default function Home() {
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
             <h2 className="text-5xl font-bold text-blue-500">
-              13
+              14
             </h2>
 
             <p className="mt-2 text-zinc-400">

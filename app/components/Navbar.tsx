@@ -18,6 +18,7 @@ const tools = [
   { name: "Reverse Pages", href: "/reverse-pages" },
   { name: "PDF Information", href: "/pdf-info" },
   { name: "Edit Metadata", href: "/edit-metadata" },
+  { name: "Remove Metadata", href: "/remove-metadata" },
 ];
 
 export default function Navbar() {
