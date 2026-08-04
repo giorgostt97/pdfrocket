@@ -102,7 +102,12 @@ export default function Footer() {
               <Link href="/terms" className="text-zinc-400 hover:text-white">
                 Terms of Service
               </Link>
-
+              <Link
+  href="/cookies"
+  className="transition hover:text-white"
+>
+  Cookie Policy
+</Link>
             </div>
 
           </div>
@@ -111,7 +116,7 @@ export default function Footer() {
 
         <div className="mt-12 border-t border-zinc-800 pt-8 text-center text-zinc-500">
 
-          © 2026 PDFRocket. All rights reserved.
+          © {new Date().getFullYear()} PDFRocket. All rights reserved.
 
         </div>
 
