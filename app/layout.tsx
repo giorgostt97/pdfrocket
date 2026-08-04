@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -140,6 +141,8 @@ export default function RootLayout({
         {children}
 
         <Footer />
+
+        <GoogleAnalytics gaId="G-5JPRV9DPF7" />
       </body>
     </html>
   );
