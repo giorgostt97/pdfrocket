@@ -158,7 +158,26 @@ export default function Home() {
 
         </div>
 
-        <div className="mt-20 grid gap-6 md:grid-cols-4">
+        {/* Hero Video */}
+
+<div className="mx-auto mt-10 max-w-md">
+  <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 shadow-xl">
+
+    <video
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      className="w-full"
+    >
+      <source src="/hero-video.mp4" type="video/mp4" />
+    </video>
+
+  </div>
+</div>
+
+<div className="mt-20 grid gap-6 md:grid-cols-4">
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
             <h2 className="text-5xl font-bold text-blue-500">
