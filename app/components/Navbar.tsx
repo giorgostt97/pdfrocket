@@ -19,6 +19,18 @@ const tools = [
   { name: "PDF Information", href: "/pdf-info" },
   { name: "Edit Metadata", href: "/edit-metadata" },
   { name: "Remove Metadata", href: "/remove-metadata" },
+  {
+  name: "PDF Thumbnails",
+  href: "/pdf-thumbnails",
+},
+{
+  name: "PDF to JPG",
+  href: "/pdf-to-jpg",
+},
+{
+  name: "PDF to PNG",
+  href: "/pdf-to-png",
+},
 ];
 
 export default function Navbar() {

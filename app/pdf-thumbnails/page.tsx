@@ -5,12 +5,12 @@ import toast from "react-hot-toast";
 import UploadBox from "../components/UploadBox";
 import SelectedFiles from "../components/SelectedFiles";
 import ToolPage from "../components/ToolPage";
-import PdfPageImage from "../components/PdfPageImage";
+import PdfCanvas from "../components/PdfCanvas";
 import * as pdfjsLib from "pdfjs-dist";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
-export default function PdfToJpgPage() {
+export default function PdfThumbnailsPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [pages, setPages] = useState<any[]>([]);
 
@@ -29,7 +29,7 @@ export default function PdfToJpgPage() {
       const bytes = new Uint8Array(await selectedFiles[0].arrayBuffer());
 
       const loadingTask = pdfjsLib.getDocument({
-        data: bytes.slice(),
+        data: bytes.slice(), // IMPORTANT
       });
 
       const pdf = await loadingTask.promise;
@@ -43,7 +43,7 @@ export default function PdfToJpgPage() {
 
       setPages(loadedPages);
 
-      toast.success(`${pdf.numPages} pages loaded`);
+      toast.success(`Loaded ${pdf.numPages} pages`);
     } catch (error) {
       console.error(error);
       toast.error("Failed to load PDF.");
@@ -52,8 +52,8 @@ export default function PdfToJpgPage() {
 
   return (
     <ToolPage
-      title="🖼 PDF to JPG"
-      description="Convert every PDF page into high-quality JPG images."
+      title="🖼 PDF Thumbnails"
+      description="Preview every page of your PDF."
     >
       <UploadBox
         accept={{
@@ -71,9 +71,9 @@ export default function PdfToJpgPage() {
       />
 
       {pages.length > 0 && (
-        <div className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {pages.map((page, index) => (
-            <PdfPageImage
+            <PdfCanvas
               key={index}
               page={page}
               pageNumber={index + 1}

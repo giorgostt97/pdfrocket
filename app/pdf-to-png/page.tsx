@@ -5,12 +5,12 @@ import toast from "react-hot-toast";
 import UploadBox from "../components/UploadBox";
 import SelectedFiles from "../components/SelectedFiles";
 import ToolPage from "../components/ToolPage";
-import PdfPageImage from "../components/PdfPageImage";
+import PdfPagePng from "../components/PdfPagePng";
 import * as pdfjsLib from "pdfjs-dist";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
-export default function PdfToJpgPage() {
+export default function PdfToPngPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [pages, setPages] = useState<any[]>([]);
 
@@ -52,8 +52,8 @@ export default function PdfToJpgPage() {
 
   return (
     <ToolPage
-      title="🖼 PDF to JPG"
-      description="Convert every PDF page into high-quality JPG images."
+      title="🖼 PDF to PNG"
+      description="Convert every PDF page into high-quality PNG images."
     >
       <UploadBox
         accept={{
@@ -73,7 +73,7 @@ export default function PdfToJpgPage() {
       {pages.length > 0 && (
         <div className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
           {pages.map((page, index) => (
-            <PdfPageImage
+            <PdfPagePng
               key={index}
               page={page}
               pageNumber={index + 1}

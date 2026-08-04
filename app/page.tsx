@@ -99,6 +99,24 @@ const tools = [
   icon: <FileText className="h-12 w-12 text-red-500" />,
   description: "Remove metadata from a PDF document.",
 },
+{
+  name: "PDF Thumbnails",
+  href: "/pdf-thumbnails",
+  icon: <Images className="h-12 w-12 text-indigo-500" />,
+  description: "Preview every page of your PDF.",
+},
+{
+  name: "PDF to JPG",
+  href: "/pdf-to-jpg",
+  icon: <Image className="h-12 w-12 text-yellow-500" />,
+  description: "Convert every PDF page into JPG images.",
+},
+{
+  name: "PDF to PNG",
+  href: "/pdf-to-png",
+  icon: <Image className="h-12 w-12 text-emerald-500" />,
+  description: "Convert every PDF page into PNG images.",
+},
 ];
 
 export default function Home() {
@@ -144,7 +162,7 @@ export default function Home() {
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
             <h2 className="text-5xl font-bold text-blue-500">
-              14
+              17
             </h2>
 
             <p className="mt-2 text-zinc-400">
