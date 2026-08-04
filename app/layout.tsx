@@ -111,17 +111,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body className="bg-black text-white min-h-screen">
-
+      <head>
         {/* Google AdSense */}
         <Script
           id="google-adsense"
+          strategy="beforeInteractive"
           async
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6015604311417808"
+          crossOrigin="anonymous"
         />
+      </head>
 
+      <body className="bg-black text-white min-h-screen">
         {/* Microsoft Clarity */}
         <Script id="microsoft-clarity" strategy="afterInteractive">
           {`
