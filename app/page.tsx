@@ -81,6 +81,18 @@ const tools = [
   icon: <RotateCw className="h-12 w-12 text-indigo-500" />,
   description: "Reverse the order of pages in a PDF.",
 },
+{
+  name: "PDF Information",
+  href: "/pdf-info",
+  icon: <FileText className="h-12 w-12 text-yellow-500" />,
+  description: "View PDF metadata and document information.",
+},
+{
+  name: "Edit Metadata",
+  href: "/edit-metadata",
+  icon: <FileText className="h-12 w-12 text-emerald-500" />,
+  description: "Edit PDF title, author, subject and more.",
+},
 ];
 
 export default function Home() {
@@ -126,7 +138,7 @@ export default function Home() {
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
             <h2 className="text-5xl font-bold text-blue-500">
-              11
+              13
             </h2>
 
             <p className="mt-2 text-zinc-400">

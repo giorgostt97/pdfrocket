@@ -16,6 +16,8 @@ const tools = [
   { name: "Page Numbers", href: "/page-numbers" },
   { name: "Duplicate Pages", href: "/duplicate-pages" },
   { name: "Reverse Pages", href: "/reverse-pages" },
+  { name: "PDF Information", href: "/pdf-info" },
+  { name: "Edit Metadata", href: "/edit-metadata" },
 ];
 
 export default function Navbar() {
