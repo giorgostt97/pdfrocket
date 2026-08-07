@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import type { Favorite } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth();
@@ -29,10 +30,9 @@ export async function POST(req: NextRequest) {
       { status: 404 }
     );
   }
-
-  const existing = user.favorites.find(
-    (favorite) => favorite.tool === tool
-  );
+const existing = user.favorites.find(
+  (favorite: Favorite) => favorite.tool === tool
+);
 
   if (existing) {
     await prisma.favorite.delete({
