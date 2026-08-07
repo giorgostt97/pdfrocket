@@ -1,12 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { useAuth, SignInButton } from "@clerk/nextjs";
 import toast from "react-hot-toast";
+
 import UploadBox from "../components/UploadBox";
 import SelectedFiles from "../components/SelectedFiles";
 import PrimaryButton from "../components/PrimaryButton";
+import ToolPage from "../components/ToolPage";
+import ToolSeo from "../components/ToolSeo";
 
 export default function WatermarkPage() {
+  const { isSignedIn } = useAuth();
+
   const [files, setFiles] = useState<File[]>([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,13 +22,17 @@ export default function WatermarkPage() {
   }
 
   async function addWatermark() {
+    if (!isSignedIn) {
+      return;
+    }
+
     if (files.length !== 1) {
-      toast("Please select exactly one PDF.");
+      toast.error("Please select exactly one PDF.");
       return;
     }
 
     if (!text.trim()) {
-      toast("Enter watermark text.");
+      toast.error("Enter watermark text.");
       return;
     }
 
@@ -39,14 +49,25 @@ export default function WatermarkPage() {
         body: formData,
       });
 
+      if (res.status === 401) {
+        toast.error("Please sign in first.");
+        return;
+      }
+
+      if (res.status === 403) {
+        toast.error("You have no credits remaining.");
+        return;
+      }
+
       if (!res.ok) {
         toast.error("Watermark failed.");
         return;
       }
 
-      const blob = await res.blob();
+      const remainingCredits =
+        res.headers.get("X-Credits-Remaining");
 
-      toast.success("Watermark added successfully!");
+      const blob = await res.blob();
 
       const url = window.URL.createObjectURL(blob);
 
@@ -56,6 +77,17 @@ export default function WatermarkPage() {
       a.click();
 
       window.URL.revokeObjectURL(url);
+
+      if (remainingCredits === "Unlimited") {
+        toast.success(
+          "Watermark added successfully! Unlimited credits remaining."
+        );
+      } else {
+        toast.success(
+          `Watermark added successfully! ${remainingCredits} credits remaining.`
+        );
+      }
+
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong.");
@@ -65,56 +97,79 @@ export default function WatermarkPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black py-16">
-      <div className="max-w-2xl mx-auto rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl p-10">
+    <ToolPage
+      tool="Watermark PDF"
+      title="💧 Watermark PDF"
+      description="Add a custom watermark to every page of your PDF."
+    >
+      {!isSignedIn && (
+        <div className="mb-8 rounded-3xl border border-blue-200 bg-blue-50 p-6 text-center">
 
-        <h1 className="text-5xl font-bold text-center text-white">
-          💧 Watermark PDF
-        </h1>
+          <h2 className="text-2xl font-bold text-zinc-900">
+            Create a free account to watermark PDFs
+          </h2>
 
-        <p className="mt-4 text-center text-gray-400">
-          Add a custom watermark to every page of your PDF.
-        </p>
+          <p className="mt-3 text-zinc-600">
+            Get <strong>20 lifetime credits</strong> for free and access all PDF tools.
+          </p>
 
-        <UploadBox
-          accept={{
-            "application/pdf": [".pdf"],
-          }}
-          onChange={setFiles}
-        />
+          <div className="mt-6">
+            <SignInButton mode="modal">
+              <button className="rounded-2xl bg-blue-600 px-8 py-3 font-semibold text-white transition hover:bg-blue-700">
+                Sign In / Sign Up
+              </button>
+            </SignInButton>
+          </div>
 
-        <SelectedFiles
-          files={files}
-          onRemove={removeFile}
-        />
-
-        <div className="mt-8">
-          <label className="block mb-2 font-semibold text-white">
-            Watermark Text
-          </label>
-
-          <input
-            type="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Example: CONFIDENTIAL"
-            className="w-full rounded-xl border border-zinc-700 bg-zinc-800 p-3 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
         </div>
+      )}
 
+      <UploadBox
+        accept={{
+          "application/pdf": [".pdf"],
+        }}
+        onChange={setFiles}
+      />
+
+      <SelectedFiles
+        files={files}
+        onRemove={removeFile}
+      />
+
+      <div className="mt-8">
+        <label className="mb-2 block font-semibold">
+          Watermark Text
+        </label>
+
+        <input
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Example: CONFIDENTIAL"
+          className="w-full rounded-xl border p-3"
+        />
+      </div>
+
+      {isSignedIn ? (
         <PrimaryButton
           loading={loading}
           disabled={loading || files.length !== 1}
-          loadingText="Adding Watermark..."
-          text="Add Watermark"
+          loadingText="⏳ Adding Watermark..."
+          text="💧 Add Watermark"
           onClick={addWatermark}
         />
+      ) : (
+        <SignInButton mode="modal">
+          <button className="mt-6 w-full rounded-2xl bg-blue-600 py-4 text-lg font-semibold text-white transition hover:bg-blue-700">
+            🔒 Sign In to Watermark PDFs
+          </button>
+        </SignInButton>
+      )}
 
-        <p className="mt-6 text-center text-sm text-gray-400">
-          🔒 Your PDF is processed securely and deleted after processing.
-        </p>
-
-      </div>
-    </main>
+      <ToolSeo
+        tool="Watermark PDF"
+        description="Add text watermarks to PDF files online for free using PDFRocket. Secure, fast and works directly in your browser."
+      />
+    </ToolPage>
   );
 }

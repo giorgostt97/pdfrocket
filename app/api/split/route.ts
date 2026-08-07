@@ -1,9 +1,37 @@
 import { PDFDocument } from "pdf-lib";
 import { NextRequest } from "next/server";
 import AdmZip from "adm-zip";
+import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
+    const { userId } = await auth();
+
+    if (!userId) {
+      return new Response("Unauthorized", {
+        status: 401,
+      });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        clerkId: userId,
+      },
+    });
+
+    if (!user) {
+      return new Response("User not found", {
+        status: 404,
+      });
+    }
+
+    if (!user.isPro && user.credits <= 0) {
+      return new Response("No credits remaining", {
+        status: 403,
+      });
+    }
+
     const formData = await req.formData();
 
     const file = formData.get("file") as File;
@@ -39,16 +67,43 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const zipBuffer = zip.toBuffer();
-const responseBuffer = Buffer.from(zipBuffer);
+    if (!user.isPro) {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          credits: {
+            decrement: 1,
+          },
+        },
+      });
+    }
 
-return new Response(responseBuffer, {
+    await prisma.history.create({
+      data: {
+        tool: "Split PDF",
+        fileName: file.name,
+        userId: user.id,
+      },
+    });
+
+    const remainingCredits = user.isPro
+      ? "Unlimited"
+      : user.credits - 1;
+
+    const zipBuffer = zip.toBuffer();
+
+    return new Response(Buffer.from(zipBuffer), {
       headers: {
         "Content-Type": "application/zip",
         "Content-Disposition":
           'attachment; filename="split-pages.zip"',
+        "X-Credits-Remaining":
+          remainingCredits.toString(),
       },
     });
+
   } catch (error) {
     console.error(error);
 

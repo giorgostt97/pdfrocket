@@ -3,9 +3,10 @@ import ToolPage from "../components/ToolPage";
 export default function CookiesPage() {
   return (
     <ToolPage
-      title="Cookie Policy"
-      description="Learn how PDFRocket uses cookies."
-    >
+  tool="Cookie Policy"
+  title="🍪 Cookie Policy"
+  description="Learn how PDFRocket uses cookies to improve your experience."
+>
       <div className="mx-auto max-w-4xl space-y-8 text-zinc-300">
 
         <section>

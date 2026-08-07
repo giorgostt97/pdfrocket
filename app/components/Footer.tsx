@@ -111,6 +111,9 @@ export default function Footer() {
 <Link href="/ocr" className="text-zinc-400 hover:text-white">
   OCR PDF
 </Link>
+<Link href="/sign-pdf" className="text-zinc-400 hover:text-white">
+  Sign PDF
+</Link>
             </div>
 
           </div>

@@ -1,131 +1,121 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://pdfrocket.app";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-  return [
+  const pages = [
     {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "daily",
+      path: "",
       priority: 1,
+      changeFrequency: "daily" as const,
     },
-
     {
-      url: `${baseUrl}/merge`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/merge",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/split`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/split",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/rotate`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/rotate",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/jpg-to-pdf`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/jpg-to-pdf",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/delete-pages`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/delete-pages",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/extract-pages`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/extract-pages",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/watermark`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/watermark",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/reorder`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/reorder",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/page-numbers`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/page-numbers",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/reverse-pages`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/reverse-pages",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/duplicate-pages`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/duplicate-pages",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/pdf-information`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/pdf-information",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/edit-metadata`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/edit-metadata",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/remove-metadata`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/remove-metadata",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/pdf-thumbnails`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/pdf-thumbnails",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/pdf-to-jpg`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/pdf-to-jpg",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
     {
-      url: `${baseUrl}/pdf-to-png`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/pdf-to-png",
       priority: 0.9,
+      changeFrequency: "monthly" as const,
     },
-
     {
-      url: `${baseUrl}/pricing`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/ocr",
+      priority: 0.9,
+      changeFrequency: "monthly" as const,
+    },
+    {
+      path: "/pricing",
       priority: 0.8,
+      changeFrequency: "monthly" as const,
     },
-
     {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      path: "/about",
       priority: 0.7,
+      changeFrequency: "monthly" as const,
     },
   ];
+
+  return pages.map((page) => ({
+    url: `${baseUrl}${page.path}`,
+    lastModified: new Date(),
+    changeFrequency: page.changeFrequency,
+    priority: page.priority,
+  }));
 }

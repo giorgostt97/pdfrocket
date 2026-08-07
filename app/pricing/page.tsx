@@ -1,6 +1,12 @@
-import { Check, X } from "lucide-react";
+"use client";
+
+import { Check } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const freeFeatures = [
+  "20 lifetime credits",
   "Merge PDF",
   "Split PDF",
   "Rotate PDF",
@@ -10,23 +16,50 @@ const freeFeatures = [
   "Watermark PDF",
   "Reorder Pages",
   "Up to 10MB per file",
-  "10 files per day",
 ];
 
 const proFeatures = [
   "Everything in Free",
+  "Unlimited credits",
   "Unlimited file size",
-  "Unlimited conversions",
+  "Unlimited PDF tools",
   "Priority processing",
   "Compress PDF",
   "PDF to JPG",
   "Word to PDF",
   "Excel to PDF",
-  "OCR (Coming Soon)",
-  "AI PDF Assistant (Coming Soon)",
+  "OCR",
+  "AI PDF Assistant",
 ];
 
 export default function PricingPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  async function checkout() {
+    try {
+      setLoading(true);
+
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || "Something went wrong.");
+        return;
+      }
+
+      router.push(data.url);
+    } catch (error) {
+      console.error(error);
+      toast.error("Unable to start checkout.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-black py-20">
       <div className="mx-auto max-w-6xl px-6">
@@ -36,7 +69,7 @@ export default function PricingPage() {
         </h1>
 
         <p className="mt-6 text-center text-xl text-zinc-400">
-          Start for free and upgrade whenever you need more power.
+          Start free with 20 lifetime credits or unlock unlimited PDF tools with Pro.
         </p>
 
         <div className="mt-20 grid gap-8 md:grid-cols-2">
@@ -58,11 +91,10 @@ export default function PricingPage() {
             </h3>
 
             <p className="text-zinc-500">
-              Forever
+              One account • 20 lifetime credits
             </p>
 
             <div className="mt-8 space-y-4">
-
               {freeFeatures.map((feature) => (
                 <div
                   key={feature}
@@ -75,7 +107,6 @@ export default function PricingPage() {
                   </span>
                 </div>
               ))}
-
             </div>
 
           </div>
@@ -93,7 +124,7 @@ export default function PricingPage() {
             </h2>
 
             <p className="mt-2 text-zinc-400">
-              For professionals and businesses.
+              Unlimited access for professionals and businesses.
             </p>
 
             <h3 className="mt-8 text-5xl font-bold text-white">
@@ -104,12 +135,15 @@ export default function PricingPage() {
               per month
             </p>
 
-            <button className="mt-8 w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white transition hover:bg-blue-700">
-              Upgrade to Pro
+            <button
+              onClick={checkout}
+              disabled={loading}
+              className="mt-8 w-full rounded-xl bg-blue-600 py-4 text-lg font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+            >
+              {loading ? "Redirecting..." : "Upgrade to Pro"}
             </button>
 
             <div className="mt-8 space-y-4">
-
               {proFeatures.map((feature) => (
                 <div
                   key={feature}
@@ -122,7 +156,6 @@ export default function PricingPage() {
                   </span>
                 </div>
               ))}
-
             </div>
 
           </div>
@@ -143,17 +176,17 @@ export default function PricingPage() {
               </h3>
 
               <p className="mt-2 text-zinc-400">
-                Yes. You can use our core PDF tools completely free with reasonable daily limits.
+                Yes. Every account receives <strong>20 lifetime credits</strong> when you sign up. Each PDF tool usage consumes one credit.
               </p>
             </div>
 
             <div>
               <h3 className="text-xl font-semibold text-white">
-                When should I upgrade?
+                What do I get with Pro?
               </h3>
 
               <p className="mt-2 text-zinc-400">
-                Upgrade when you need unlimited usage, larger files and advanced tools.
+                Pro removes all credit limits and unlocks unlimited PDF tools, unlimited file sizes, priority processing, and all future premium features.
               </p>
             </div>
 
@@ -163,7 +196,7 @@ export default function PricingPage() {
               </h3>
 
               <p className="mt-2 text-zinc-400">
-                Yes. Your subscription can be cancelled at any time.
+                Yes. You can cancel your subscription at any time, and your Pro benefits remain active until the end of your current billing period.
               </p>
             </div>
 

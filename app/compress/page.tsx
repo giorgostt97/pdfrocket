@@ -39,9 +39,10 @@ export default function CompressPage() {
 
   return (
     <ToolPage
-      title="🗜 Compress PDF"
-      description="Reduce PDF size while keeping the best possible quality."
-    >
+  tool="Compress PDF"
+  title="🗜 Compress PDF"
+  description="Reduce PDF size while keeping the best possible quality."
+>
       <UploadBox
         accept={{
           "application/pdf": [".pdf"],

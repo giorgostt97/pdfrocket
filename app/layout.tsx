@@ -1,12 +1,14 @@
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Toaster } from "react-hot-toast";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
+import { SignatureProvider } from "./context/SignatureContext";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -14,7 +16,9 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://pdfrocket.app"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  ),
 
   title: {
     default: "PDFRocket - Free Online PDF Tools",
@@ -48,19 +52,42 @@ export const metadata: Metadata = {
     "Online PDF Tools",
   ],
 
-  authors: [
-    {
-      name: "PDFRocket",
-    },
-  ],
+  authors: [{ name: "PDFRocket" }],
 
   creator: "PDFRocket",
-
   publisher: "PDFRocket",
+
+  category: "technology",
+
+  referrer: "origin-when-cross-origin",
+
+  alternates: {
+    canonical: "/",
+  },
+
+  verification: {
+    google: "YOUR_GOOGLE_SEARCH_CONSOLE_CODE",
+  },
 
   robots: {
     index: true,
     follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+      "max-snippet": -1,
+    },
+  },
+
+  manifest: "/site.webmanifest",
+
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "PDFRocket",
   },
 
   openGraph: {
@@ -104,15 +131,22 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#2563eb",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("font-sans", geist.variable)}
+    >
       <head>
-        {/* Google AdSense */}
         <Script
           id="google-adsense"
           strategy="beforeInteractive"
@@ -122,48 +156,54 @@ export default function RootLayout({
         />
       </head>
 
-      <body className="bg-black text-white min-h-screen">
-        {/* Microsoft Clarity */}
+      <body className="min-h-screen bg-black text-white">
         <Script id="microsoft-clarity" strategy="afterInteractive">
           {`
             (function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              t=l.createElement(r);
+              t.async=1;
+              t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];
+              y.parentNode.insertBefore(t,y);
             })(window, document, "clarity", "script", "xx2rt73yd4");
           `}
         </Script>
 
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: "#18181b",
-              color: "#ffffff",
-              border: "1px solid #27272a",
-              borderRadius: "12px",
-            },
-            success: {
-              iconTheme: {
-                primary: "#22c55e",
-                secondary: "#ffffff",
-              },
-            },
-            error: {
-              iconTheme: {
-                primary: "#ef4444",
-                secondary: "#ffffff",
-              },
-            },
-          }}
-        />
+        <ClerkProvider afterSignOutUrl="/">
+          <SignatureProvider>
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 3000,
+                style: {
+                  background: "#18181b",
+                  color: "#ffffff",
+                  border: "1px solid #27272a",
+                  borderRadius: "12px",
+                },
+                success: {
+                  iconTheme: {
+                    primary: "#22c55e",
+                    secondary: "#ffffff",
+                  },
+                },
+                error: {
+                  iconTheme: {
+                    primary: "#ef4444",
+                    secondary: "#ffffff",
+                  },
+                },
+              }}
+            />
 
-        <Navbar />
+            <Navbar />
 
-        {children}
+            <main>{children}</main>
 
-        <Footer />
+            <Footer />
+          </SignatureProvider>
+        </ClerkProvider>
 
         <GoogleAnalytics gaId="G-5JPRV9DPF7" />
       </body>
