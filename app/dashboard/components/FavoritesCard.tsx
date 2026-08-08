@@ -1,8 +1,13 @@
 import Link from "next/link";
-import { Favorite } from "@prisma/client";
+
+type FavoriteItem = {
+  id: string;
+  tool: string;
+  userId: string;
+};
 
 type Props = {
-  favorites: Favorite[];
+  favorites: FavoriteItem[];
 };
 
 export default function FavoritesCard({
@@ -10,45 +15,39 @@ export default function FavoritesCard({
 }: Props) {
   return (
     <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-lg">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-zinc-900">
+          ⭐ Favorites
+        </h2>
 
-      <h2 className="text-2xl font-bold text-zinc-900">
-        ⭐ Favorite Tools
-      </h2>
+        <Link
+          href="/dashboard/favorites"
+          className="text-sm font-semibold text-blue-600 hover:underline"
+        >
+          View All
+        </Link>
+      </div>
 
       {favorites.length === 0 ? (
-        <div className="mt-6 rounded-2xl border border-dashed border-zinc-300 p-8 text-center">
-
-          <p className="text-lg font-medium text-zinc-700">
-            No favorite tools yet.
+        <div className="rounded-2xl border border-dashed border-zinc-300 p-8 text-center">
+          <p className="text-zinc-600">
+            You haven't added any favorite tools yet.
           </p>
-
-          <p className="mt-2 text-zinc-500">
-            Star a PDF tool to see it here.
-          </p>
-
         </div>
       ) : (
-        <div className="mt-6 space-y-4">
-
-          {favorites.map((favorite) => (
-            <Link
+        <div className="space-y-3">
+          {favorites.slice(0, 5).map((favorite) => (
+            <div
               key={favorite.id}
-              href="/"
-              className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-zinc-50 p-4 transition hover:bg-zinc-100"
+              className="rounded-xl border border-zinc-200 bg-zinc-50 p-4"
             >
-              <span className="font-medium text-zinc-900">
-                {favorite.tool}
+              <span className="font-medium text-zinc-800">
+                ⭐ {favorite.tool}
               </span>
-
-              <span className="text-yellow-500 text-xl">
-                ★
-              </span>
-            </Link>
+            </div>
           ))}
-
         </div>
       )}
-
     </div>
   );
 }
