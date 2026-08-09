@@ -30,19 +30,17 @@ export default function DashboardSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-72 rounded-3xl border border-zinc-700 bg-zinc-900 p-6 shadow-lg">
-
-      <h2 className="mb-8 text-2xl font-bold text-white">
+    <aside className="w-full shrink-0 border-b border-zinc-800 bg-zinc-950 p-4 lg:w-64 lg:border-b-0 lg:border-r lg:p-6">
+      <h2 className="mb-4 text-2xl font-bold text-white lg:mb-8">
         Dashboard
       </h2>
 
-      <nav className="space-y-3">
-
+      <nav className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-3 lg:overflow-visible">
         {links.map((link) => (
           <Link
             key={link.href}
             href={link.href}
-            className={`block rounded-2xl px-5 py-4 transition ${
+            className={`block shrink-0 whitespace-nowrap rounded-2xl px-4 py-3 text-sm transition lg:px-5 lg:py-4 lg:text-base ${
               pathname === link.href
                 ? "bg-blue-600 text-white"
                 : "bg-zinc-800 text-zinc-200 hover:bg-zinc-700"
@@ -51,9 +49,7 @@ export default function DashboardSidebar() {
             {link.name}
           </Link>
         ))}
-
       </nav>
-
     </aside>
   );
 }
