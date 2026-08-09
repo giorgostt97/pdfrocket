@@ -21,6 +21,7 @@ export async function POST(req: Request) {
 
   if (!webhookSecret) {
     console.error("STRIPE_WEBHOOK_SECRET is missing");
+
     return NextResponse.json(
       { error: "Webhook secret is not configured" },
       { status: 500 }
@@ -36,7 +37,10 @@ export async function POST(req: Request) {
       webhookSecret
     );
   } catch (err) {
-    console.error("Stripe webhook signature verification failed:", err);
+    console.error(
+      "Stripe webhook signature verification failed:",
+      err
+    );
 
     return NextResponse.json(
       { error: "Webhook Error" },
@@ -53,7 +57,9 @@ export async function POST(req: Request) {
         const userId = session.metadata?.userId;
 
         if (!userId) {
-          console.error("No userId found in checkout session metadata");
+          console.error(
+            "No userId found in checkout session metadata"
+          );
           break;
         }
 
@@ -69,7 +75,8 @@ export async function POST(req: Request) {
           data: {
             isPro: true,
             subscriptionStatus: "active",
-            stripeSubscriptionId: subscriptionId ?? null,
+            stripeSubscriptionId:
+              subscriptionId ?? null,
           },
         });
 
@@ -116,11 +123,25 @@ export async function POST(req: Request) {
         break;
       }
 
+      case "invoice.payment_failed": {
+        const invoice =
+          event.data.object as Stripe.Invoice;
+
+        console.error(
+          `Stripe payment failed for customer ${invoice.customer}`
+        );
+
+        break;
+      }
+
       default:
         break;
     }
   } catch (error) {
-    console.error("Stripe webhook database error:", error);
+    console.error(
+      "Stripe webhook database error:",
+      error
+    );
 
     return NextResponse.json(
       { error: "Webhook processing failed" },
