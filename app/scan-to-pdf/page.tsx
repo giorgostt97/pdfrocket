@@ -40,6 +40,7 @@ export default function ScanToPdfPage() {
 
       files.forEach((file) => {
         formData.append("files", file);
+        formData.append("tool", "Scan to PDF");
       });
 
       const res = await fetch("/api/jpg-to-pdf", {

@@ -34,6 +34,8 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
 
     const files = formData.getAll("files") as File[];
+    const toolName =
+  (formData.get("tool") as string) || "JPG to PDF";
 
     if (files.length === 0) {
       return new Response("No images uploaded", {
@@ -89,7 +91,7 @@ export async function POST(req: NextRequest) {
 
     await prisma.history.create({
       data: {
-        tool: "JPG to PDF",
+        tool: toolName,
         fileName: files[0].name,
         userId: user.id,
       },
