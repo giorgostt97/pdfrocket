@@ -33,6 +33,7 @@ const tools = [
   { name: "PDF to JPG", href: "/pdf-to-jpg" },
   { name: "PDF to PNG", href: "/pdf-to-png" },
   { name: "Add Blank Page", href: "/add-blank-page" },
+  { name: "Scan to PDF", href: "/scan-to-pdf" },
 ];
 
 export default function Navbar() {

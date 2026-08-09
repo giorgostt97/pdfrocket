@@ -129,6 +129,12 @@ const tools = [
   icon: <FileText className="h-12 w-12 text-blue-500" />,
   description: "Insert a blank page into a PDF.",
 },
+{
+  name: "Scan to PDF",
+  href: "/scan-to-pdf",
+  icon: <Image className="h-12 w-12 text-sky-500" />,
+  description: "Scan documents with your camera and create a PDF.",
+},
 ];
 
 export default function Home() {
@@ -176,7 +182,7 @@ export default function Home() {
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
             <h2 className="text-5xl font-bold text-blue-500">
-              19
+              20
             </h2>
 
             <p className="mt-2 text-zinc-400">
